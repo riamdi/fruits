@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="objects">
+        <img class="collecting_element" src="img/cat_gif.gif" alt="" width="130px">
+    </div>
+    <!-- <img class="object 1" src="img/—Pngtree—pixel game fruit delicious orange_6362820.png" alt="" width="50px">
+    <img class="object 2" src="img/—Pngtree—pixel game fruit delicious_6363034.png" alt="" width="50px">
+    <img class="object 3" src="img/pngwing.com (1).png" alt="" width="50px">
+    <img class="object 4" src="img/pngwing.com (2).png" alt="" width="50px">
+    <img class="object 5" src="img/pngwing.com (3).png" alt="" width="50px">
+    <img class="object 6" src="img/pngwing.com (4).png" alt="" width="50px">
+    <img class="object 7" src="img/pngwing.com (5).png" alt="" width="50px">
+    <img class="object 8" src="img/pngwing.com (6).png" alt="" width="50px">
+    <img class="object bomb" src="img/photo_2025-06-23_22-38-14_7519231431592116240.png" alt="" width="50px">
+    <img class="object 9" src="img/photo_2025-06-23_22-35-32_7519230735807414284.png" alt="" width="50px"> -->
+    <script>
+        let widthScreen = window.innerWidth
+        let heightScreen = window.innerHeight
+        let list_object_img = [
+            "img/pngwing8.png",
+            "img/pngwing7.png",
+            "img/pngwing1.png",
+            "img/pngwing2.png",
+            "img/pngwing3.png",
+            "img/pngwing5.png",
+            "img/pngwing6.png",
+            "img/pngwing9.png",
+            "img/bomb.png"
+        ]
+        let img_boom = "img/vzriv"
+        // функция вычисления случайной области падения
+        function getRandomFallArea(min, max, step) {
+                return Math.floor(Math.random() * (max - min) / step + min / step) * step;
+            }
+        //функция появления объектов
+        function appear_objects() {
+            let object = document.createElement('div') //создание тега
+            object.innerHTML = `<img src=${list_object_img[Math.floor(Math.random() * list_object_img.length)]} alt="" width="50px">` //добавление рандомной картинки
+            let fall_area = getRandomFallArea(30, widthScreen - 10, 30) //рандомная ширина
+            object.style.marginLeft = `${fall_area}px`
+            object.style.marginTop = `0px`
+            document.querySelector('.objects').append(object) //добавление нашего объекта в основной тег html
+            falling_object(object)
+        }
+        //функция падения объектов
+        function falling_object(object){
+            let fall_height = 1
+            const falling_interval = setInterval(() =>{
+                if (fall_height <= heightScreen - 50){
+                    object.style.marginTop = `${fall_height}px`
+                    fall_height+=2
+                }else{
+                    clearInterval(falling_interval)
+                }
+            }
+        , 20)
+        }
+        //функция вызывающая работу падения всех объектов
+        const start_fall = setInterval(() => { 
+            appear_objects()
+        }, 3000); 
+        // управление главным элементом с помощью стрелок
+        let element = document.querySelector('.collecting_element')
+        let element_position = element.getBoundingClientRect()
+        let element_position_x = element_position.left
+        let step_element = 20
+        document.addEventListener('keydown', function(event){
+            switch(event.key){
+                case "ArrowLeft":
+                element_position_x -= step_element
+                break;
+                case "ArrowRight":
+                element_position_x += step_element
+                break;
+                case "A":
+                element_position_x -= step_element
+                break;
+                case "D":
+                element_position_x += step_element
+                break;
+            }
+            element.style.left = `${element_position_x}px`
+        })
+    </script>
+</body>
+</html>

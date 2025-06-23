@@ -1,0 +1,25 @@
+/* body{
+    background-color: antiquewhite;
+} */
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Чтобы не было прокрутки */
+        background-color: antiquewhite;
+    }
+    .objects {
+        position: relative;
+        height: 100vh;
+        width: 100vw;
+        background-color: #f0f0f0; /* Временный фон для отладки */
+    }
+    .objects > div {
+        position: absolute;
+        top: 0; /* Ключевая строка - прижимаем к верху */
+    }
+    .collecting_element {
+        position: absolute;
+        bottom: 0; /* Теперь сработает */
+        left: 50%;
+        transform: translateX(-50%); /* Центрирование */
+    }
