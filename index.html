@@ -24,7 +24,7 @@
     }
     .collecting_element {
         position: absolute;
-        bottom: 0; /* Теперь сработает */
+        bottom: 50px; /* Теперь сработает */
         left: 50%;
         transform: translateX(-50%); /* Центрирование */
         overflow-x: hidden;
@@ -70,7 +70,7 @@
         function falling_object(object){
             let fall_height = 1
             const falling_interval = setInterval(() =>{
-                if (fall_height <= heightScreen - 70){
+                if (fall_height <= heightScreen - 130){
                     object.style.marginTop = `${fall_height}px`
                     fall_height+=2
                 }else{
