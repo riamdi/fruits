@@ -23,4 +23,5 @@
         left: 50%;
         transform: translateX(-50%); /* Центрирование */
         touch-action: none;
+        overflow-x: hidden;
     }

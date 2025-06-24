@@ -27,6 +27,9 @@
         bottom: 0; /* Теперь сработает */
         left: 50%;
         transform: translateX(-50%); /* Центрирование */
+        overflow-x: hidden;
+        touch-action: none; /* Отключаем стандартное поведение касаний */
+    user-select: none; /* Запрещаем выделение при касании */
     }
     </style>
 </head>
@@ -129,7 +132,7 @@
             e.preventDefault(); // чтобы страница не скроллилась
             let touch = e.touches[0] 
             let element_new_position = touch.clientX - touchOffset
-            element_new_position = Math.max(0, Math.min(widthScreen, element_new_position));
+            element_new_position = Math.max(60, Math.min(widthScreen - 65, element_new_position));
             element.style.left = `${element_new_position}px`
             
         })
