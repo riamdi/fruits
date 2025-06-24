@@ -11,13 +11,16 @@
   --app-height: 100vh;
 }
 
-body {
+html, body {
   height: var(--app-height);
   margin: 0;
+  padding: 0;
   overflow: hidden;
   background-color: antiquewhite;
 }
-
+body {
+  height: var(--app-height); /* будет установлен из JS */
+}
 .objects {
   height: 100%;
   width: 100%;
@@ -143,17 +146,13 @@ body {
             element.style.left = `${element_new_position}px`
             
         })
-        const setAppHeight = () => {
-  document.documentElement.style.setProperty(
-    '--app-height',
-    `${window.innerHeight}px`
-  );
-};
-
-// Устанавливаем сразу и при любом изменении размера/ориентации
+function setAppHeight() {
+  document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+}
+setAppHeight();
 window.addEventListener('resize', setAppHeight);
 window.addEventListener('orientationchange', setAppHeight);
-setAppHeight();
+
 
     </script>
 </body>
