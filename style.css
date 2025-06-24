@@ -22,4 +22,5 @@
         bottom: 0; /* Теперь сработает */
         left: 50%;
         transform: translateX(-50%); /* Центрирование */
+        touch-action: none;
     }

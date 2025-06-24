@@ -3,23 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
     <title>Document</title>
+    <style>
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Чтобы не было прокрутки */
+        background-color: antiquewhite;
+    }
+    .objects {
+        position: relative;
+        height: 100vh;
+        width: 100vw;
+        background-color: #f0f0f0; /* Временный фон для отладки */
+    }
+    .objects > div {
+        position: absolute;
+        top: 0; /* Ключевая строка - прижимаем к верху */
+    }
+    .collecting_element {
+        position: absolute;
+        bottom: 0; /* Теперь сработает */
+        left: 50%;
+        transform: translateX(-50%); /* Центрирование */
+    }
+    </style>
 </head>
 <body>
     <div class="objects">
         <img class="collecting_element" src="img/cat_gif.gif" alt="" width="130px">
     </div>
-    <!-- <img class="object 1" src="img/—Pngtree—pixel game fruit delicious orange_6362820.png" alt="" width="50px">
-    <img class="object 2" src="img/—Pngtree—pixel game fruit delicious_6363034.png" alt="" width="50px">
-    <img class="object 3" src="img/pngwing.com (1).png" alt="" width="50px">
-    <img class="object 4" src="img/pngwing.com (2).png" alt="" width="50px">
-    <img class="object 5" src="img/pngwing.com (3).png" alt="" width="50px">
-    <img class="object 6" src="img/pngwing.com (4).png" alt="" width="50px">
-    <img class="object 7" src="img/pngwing.com (5).png" alt="" width="50px">
-    <img class="object 8" src="img/pngwing.com (6).png" alt="" width="50px">
-    <img class="object bomb" src="img/photo_2025-06-23_22-38-14_7519231431592116240.png" alt="" width="50px">
-    <img class="object 9" src="img/photo_2025-06-23_22-35-32_7519230735807414284.png" alt="" width="50px"> -->
     <script>
         let widthScreen = window.innerWidth
         let heightScreen = window.innerHeight
@@ -43,7 +57,7 @@
         function appear_objects() {
             let object = document.createElement('div') //создание тега
             object.innerHTML = `<img src=${list_object_img[Math.floor(Math.random() * list_object_img.length)]} alt="" width="50px">` //добавление рандомной картинки
-            let fall_area = getRandomFallArea(30, widthScreen - 10, 30) //рандомная ширина
+            let fall_area = getRandomFallArea(30, widthScreen - 30, 30) //рандомная ширина
             object.style.marginLeft = `${fall_area}px`
             object.style.marginTop = `0px`
             document.querySelector('.objects').append(object) //добавление нашего объекта в основной тег html
@@ -53,7 +67,7 @@
         function falling_object(object){
             let fall_height = 1
             const falling_interval = setInterval(() =>{
-                if (fall_height <= heightScreen - 50){
+                if (fall_height <= heightScreen - 70){
                     object.style.marginTop = `${fall_height}px`
                     fall_height+=2
                 }else{
@@ -69,7 +83,7 @@
         // управление главным элементом с помощью стрелок
         let element = document.querySelector('.collecting_element')
         let element_position = element.getBoundingClientRect()
-        let element_position_x = element_position.left
+        let element_position_x = element_position.left + Math.floor(element_position.width/2)
         let step_element = 20
         document.addEventListener('keydown', function(event){
             switch(event.key){
@@ -79,14 +93,45 @@
                 case "ArrowRight":
                 element_position_x += step_element
                 break;
-                case "A":
+                case "a":
                 element_position_x -= step_element
                 break;
-                case "D":
+                case "d":
                 element_position_x += step_element
                 break;
             }
-            element.style.left = `${element_position_x}px`
+            if (element_position_x < 50 && element_position_x > widthScreen - 50){  //если текущие координаты вписываются в окно то меняем дальше
+                element.style.left = `${element_position_x}px`
+            }else{ //если не вписываются, доводим до момента когда вписываются и меняем дальше, иначе она застрянет и не двинеться
+                if (element_position_x <= 50 ){
+                    while (element_position_x <= 50 ){
+                        element_position_x +=1
+                    }
+                }
+                if (element_position_x >=  widthScreen - 50 ){
+                    while (element_position_x >=  widthScreen - 50 ){
+                        element_position_x -=1
+                    }
+                }
+                element.style.left = `${element_position_x}px`
+            }
+            
+        })
+        //управление главным элементом при помощи касания пальцев
+        let offset = 0
+        element.addEventListener('touchstart', function(e){
+            let touch = e.touches[0] // запомниет касание первого элемента
+            let elementRect = element.getBoundingClientRect()
+            touchOffset = touch.clientX - (elementRect.left + Math.floor(elementRect.width/2) ) //разница на сколько надо сместиться
+            e.preventDefault(); 
+        })
+        element.addEventListener('touchmove', function(e){
+            e.preventDefault(); // чтобы страница не скроллилась
+            let touch = e.touches[0] 
+            let element_new_position = touch.clientX - touchOffset
+            element_new_position = Math.max(0, Math.min(widthScreen, element_new_position));
+            element.style.left = `${element_new_position}px`
+            
         })
     </script>
 </body>
