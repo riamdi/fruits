@@ -8,22 +8,18 @@
     <title>Document</title>
     <style>
     body {
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) 
-             env(safe-area-inset-bottom) env(safe-area-inset-left);
-    height: 100vh;
-    height: -webkit-fill-available; /* Для Safari */
-        margin: 0;
-        padding: 0;
-        overflow: hidden; /* Чтобы не было прокрутки */
-        background-color: antiquewhite;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100dvh; /* вместо vh или -webkit-fill-available */
+    background-color: antiquewhite;
     }
     .objects {
         position: relative;
         height: 100vh;
         width: 100vw;
         background-color: #f0f0f0; /* Временный фон для отладки */
-            min-height: -webkit-fill-available;
-    padding-top: env(safe-area-inset-top);
+        padding: 0;
     }
     .objects > div {
         position: absolute;
