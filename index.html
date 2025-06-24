@@ -29,12 +29,13 @@ body {
         padding: 0;
     }
     .objects > div {
+        pointer-events: none;
         position: absolute;
         top: 0; /* Ключевая строка - прижимаем к верху */
     }
     .collecting_element {
         position: absolute;
-        bottom: 50px; 
+        bottom: 0px; 
         left: 50%;
         transform: translateX(-50%); /* Центрирование */
         overflow-x: hidden;
@@ -82,7 +83,7 @@ body {
         function falling_object(object){
             let fall_height = 1
             const falling_interval = setInterval(() =>{
-                if (fall_height <= element_position.top + Math.floor(element_position.height/2)){
+                if (fall_height < heightScreen - element.offsetHeight/ 2){
                     object.style.marginTop = `${fall_height}px`
                     fall_height+=2
                 }else{
