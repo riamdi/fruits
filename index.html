@@ -24,7 +24,7 @@
     }
     .collecting_element {
         position: absolute;
-        bottom: 50px; /* Теперь сработает */
+        bottom: 50px; 
         left: 50%;
         transform: translateX(-50%); /* Центрирование */
         overflow-x: hidden;
@@ -52,6 +52,8 @@
             "img/bomb.png"
         ]
         let img_boom = "img/vzriv"
+        let element = document.querySelector('.collecting_element')
+        let element_position = element.getBoundingClientRect()
         // функция вычисления случайной области падения
         function getRandomFallArea(min, max, step) {
                 return Math.floor(Math.random() * (max - min) / step + min / step) * step;
@@ -70,7 +72,7 @@
         function falling_object(object){
             let fall_height = 1
             const falling_interval = setInterval(() =>{
-                if (fall_height <= heightScreen - 130){
+                if (fall_height <= element_position.top + Math.floor(element_position.height/2)){
                     object.style.marginTop = `${fall_height}px`
                     fall_height+=2
                 }else{
@@ -84,8 +86,6 @@
             appear_objects()
         }, 3000); 
         // управление главным элементом с помощью стрелок
-        let element = document.querySelector('.collecting_element')
-        let element_position = element.getBoundingClientRect()
         let element_position_x = element_position.left + Math.floor(element_position.width/2)
         let step_element = 20
         document.addEventListener('keydown', function(event){
