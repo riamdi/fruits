@@ -7,23 +7,22 @@
     <!-- <link rel="stylesheet" href="style.css"> -->
     <title>Document</title>
     <style>
-   :root {
-  --app-height: 100vh;
-}
-
-html, body {
-  height: var(--app-height);
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: antiquewhite;
-}
-body {
-  height: var(--app-height); /* будет установлен из JS */
-}
-.objects {
-  height: 100%;
-  width: 100%;
+    :root {
+        --app-height: 100vh;
+    }
+    html, body {
+        height: var(--app-height);
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: antiquewhite;
+        }
+        body {
+        height: var(--app-height); /* будет установлен из JS */
+    }
+    .objects {
+        height: 100%;
+        width: 100%;
         position: relative;
         background-color: #f0f0f0; /* Временный фон для отладки */
         padding: 0;
@@ -45,8 +44,12 @@ body {
     </style>
 </head>
 <body>
+    <div class="count">
+        счёт: 0
+    </div>
     <div class="objects">
         <img class="collecting_element" src="img/cat_gif.gif" alt="" width="130px">
+        
     </div>
     <script>
         let widthScreen = window.innerWidth
@@ -65,6 +68,9 @@ body {
         let img_boom = "img/vzriv"
         let element = document.querySelector('.collecting_element')
         let element_position = element.getBoundingClientRect()
+        let count_ready_elem = 0
+        let count_skip_elem = 0
+        let count = document.querySelector('.count')
         // функция вычисления случайной области падения
         function getRandomFallArea(min, max, step) {
                 return Math.floor(Math.random() * (max - min) / step + min / step) * step;
@@ -72,7 +78,12 @@ body {
         //функция появления объектов
         function appear_objects() {
             let object = document.createElement('div') //создание тега
-            object.innerHTML = `<img src=${list_object_img[Math.floor(Math.random() * list_object_img.length)]} alt="" width="50px">` //добавление рандомной картинки
+            random_object = list_object_img[Math.floor(Math.random() * list_object_img.length)]
+            if (random_object == "img/bomb.png"){
+                object.innerHTML = `<img class="bomb" src=${random_object} alt="" width="50px">` //добавление рандомной картинки
+            }else{
+                object.innerHTML = `<img src=${random_object} alt="" width="50px">` //добавление рандомной картинки
+            }            
             let fall_area = getRandomFallArea(30, widthScreen - 30, 30) //рандомная ширина
             object.style.marginLeft = `${fall_area}px`
             object.style.marginTop = `0px`
@@ -86,16 +97,50 @@ body {
                 if (fall_height < heightScreen - element.offsetHeight/ 2){
                     object.style.marginTop = `${fall_height}px`
                     fall_height+=2
+                    
                 }else{
                     clearInterval(falling_interval)
+                    collision_object(object)
                 }
             }
-        , 20)
+        , 10)
         }
         //функция вызывающая работу падения всех объектов
         const start_fall = setInterval(() => { 
             appear_objects()
         }, 3000); 
+        //функция столкновения объектов
+        function collision_object(object) {
+            const catRect = element.getBoundingClientRect();
+            const objRect = object.firstChild.getBoundingClientRect();
+            const catchZoneTop = catRect.top;
+            const catchZoneBottom = catRect.bottom;
+            
+            if (objRect.bottom >= catchZoneTop &&  // Нижняя часть объекта в зоне ловли
+                objRect.top <= catchZoneBottom &&  // Верхняя часть объекта ещё не прошла зону
+                objRect.right >= catRect.left &&   // Правый край объекта левее левого края кота
+                objRect.left <= catRect.right) {   // Левый край объекта правее правого края кота
+                if (object.firstChild.classList.contains('bomb')){
+                    let parent_elem = document.querySelector('.objects')
+                    let old_elem = document.querySelector('.collecting_element')
+                    let old_elem_pos = old_elem.getBoundingClientRect()
+                    let new_elem_top = old_elem_pos.top
+                     let new_elem_left = old_elem_pos.left
+                    let new_elem = document.createElement('div')
+                    new_elem.innerHTML = `<img class="sad_cat" src="img/sad-cat.png" alt="" width="60px">`
+                    new_elem.style.left = `${new_elem_left}px`
+                    new_elem.style.top = `${new_elem_top}px`
+                    parent_elem.replaceChild(new_elem, old_elem)
+                    clearInterval(start_fall)
+                }else{
+                    count_ready_elem++;
+                    count.innerHTML = `счёт: ${count_ready_elem}`;
+                    object.remove(); 
+                }
+                
+            }
+        }
+
         // управление главным элементом с помощью стрелок
         let element_position_x = element_position.left + Math.floor(element_position.width/2)
         let step_element = 20
@@ -147,12 +192,13 @@ body {
             element.style.left = `${element_new_position}px`
             
         })
-function setAppHeight() {
-  document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
-}
-setAppHeight();
-window.addEventListener('resize', setAppHeight);
-window.addEventListener('orientationchange', setAppHeight);
+        //чтоб всё норм было видно
+        function setAppHeight() {
+        document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+        }
+        setAppHeight();
+        window.addEventListener('resize', setAppHeight);
+        window.addEventListener('orientationchange', setAppHeight);
 
 
     </script>
