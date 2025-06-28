@@ -7,30 +7,43 @@
     <!-- <link rel="stylesheet" href="style.css"> -->
     <title>Document</title>
     <style>
+    @font-face {
+        font-family: 'gnf';
+        src: url('fonts/GNF.ttf');
+    }
     :root {
         --app-height: 100vh;
     }
+
     html, body {
+        
         height: var(--app-height);
         margin: 0;
         padding: 0;
         overflow: hidden;
-        background-color: antiquewhite;
+        background-image: url(img/kopia.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        
         }
-        body {
-        height: var(--app-height); /* будет установлен из JS */
+    body {
+        height: var(--app-height); 
     }
     .objects {
         height: 100%;
         width: 100%;
         position: relative;
-        background-color: #f0f0f0; /* Временный фон для отладки */
-        padding: 0;
+        padding: 0;                                                 
+        
     }
     .objects > div {
         pointer-events: none;
         position: absolute;
-        top: 0; /* Ключевая строка - прижимаем к верху */
+        top: 0; 
+    }
+    .count{
+        font-family: 'gnf';
+        text-align: center;
     }
     .collecting_element {
         position: absolute;
@@ -39,7 +52,7 @@
         transform: translateX(-50%); /* Центрирование */
         overflow-x: hidden;
         touch-action: none; /* Отключаем стандартное поведение касаний */
-    user-select: none; /* Запрещаем выделение при касании */
+        user-select: none; /* Запрещаем выделение при касании */
     }
     </style>
 </head>
@@ -127,7 +140,7 @@
                     let new_elem_top = old_elem_pos.top
                      let new_elem_left = old_elem_pos.left
                     let new_elem = document.createElement('div')
-                    new_elem.innerHTML = `<img class="sad_cat" src="img/sad-cat.png" alt="" width="60px">`
+                    new_elem.innerHTML = `<img class="sad_cat" src="img/sad-cat.png" alt="" width="80px">`
                     new_elem.style.left = `${new_elem_left}px`
                     new_elem.style.top = `${new_elem_top}px`
                     parent_elem.replaceChild(new_elem, old_elem)
@@ -135,9 +148,15 @@
                 }else{
                     count_ready_elem++;
                     count.innerHTML = `счёт: ${count_ready_elem}`;
-                    object.remove(); 
+                    object.remove()
                 }
                 
+            }else{
+                object.remove()
+                if(!object.firstChild.classList.contains('bomb')){
+                    count_skip_elem++
+                }
+
             }
         }
 
